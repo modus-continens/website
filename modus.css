@@ -1,0 +1,36 @@
+body {
+  padding-bottom: 20px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.modus-bg {
+  background-color: #8ec5fc25;
+  background-image: linear-gradient(62deg, #8EC5FC25 0%, #E0C3FC25 100%);
+}
+
+/* MARKETING CONTENT
+-------------------------------------------------- */
+
+.marketing .col-lg-4 {
+  margin: 1rem;
+}
+
+/* Featurettes
+------------------------- */
+
+.featurette-divider {
+  margin: 1rem 0; /* Space out the Bootstrap <hr> more */
+}
+
+/* Thin out the marketing headings */
+.featurette-heading {
+  margin: 1rem 0; /* Space out the Bootstrap <hr> more */
+
+  font-weight: 300;
+  line-height: 1;
+  /* rtl:remove */
+  letter-spacing: -.05rem;
+}
