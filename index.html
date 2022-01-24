@@ -119,7 +119,7 @@ FROM ubuntu:20.04 AS base
 RUN apt-get update && apt-get install -y package-foo \
     && rm -rf /var/lib/apt/lists/*
 
-RUN base AS app
+FROM base AS app
 COPY src .
 RUN cd src && make install
         </code></pre>
@@ -195,7 +195,7 @@ python(python_version, "ubuntu", "14.04") :-
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <h2 class="featurette-heading">Standard Library</h2>
-        <p class="lead">Modus provides a library of builtin predicates to handle common data structure in your build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
+        <p class="lead">Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
         <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates &raquo;</a></p>
       </div>
       <div class="col-lg-6 col-md-12">
@@ -263,7 +263,7 @@ release :- (
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <h2 class="featurette-heading">Optimising Image Size</h2>
-        <p class="lead">Encoding precise dependencies helps to optimise the resulting image size. Besides, Modus provides additional tools to reduce the image size such as the operator <code>::merge</code> that merges arbitrary number of layers into one.</p>
+        <p class="lead">Encoding precise dependencies helps to optimise the resulting image size. Besides, Modus provides additional tools to reduce the image size such as the operator <code>::merge</code> that merges several layers into one.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
@@ -286,7 +286,7 @@ app(optimisation) :-
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <h2 class="featurette-heading">User-Defined Commands</h2>
-        <p class="lead">Modus allow users to define their own commands, such as layer building functions or logical predicates, which facilitates modularity and code reuse.</p>
+        <p class="lead">Modus allows users to define their own commands, such as layer building functions or logical predicates, which facilitates modularity and code reuse.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
@@ -313,12 +313,12 @@ app :-
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Fine-grained Caching <span class="badge bg-warning">WIP</span></h2>
-        <p class="lead">Modus allow users to define custom cache invalidation predicates to ensure predictable cache behavior and optimise build time.</p>
+        <h2 class="featurette-heading">Fine-Grained Caching <span class="badge bg-warning">WIP</span></h2>
+        <p class="lead">Modus allows users to define custom cache invalidation predicates to ensure predictable cache behavior and optimise build time.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
-We need some initial example href-counter
+We need some initial example.
          </code></pre>
       </div>
     </div>
