@@ -127,7 +127,7 @@ RUN cd src && make install
 <em>Modusfile</em> is a set of logical rules; rule bodies are expressions:
         <pre><code class="language-python">
 base :-
-    from(f"ubuntu:20.04"),
+    from("ubuntu:20.04"),
     run("apt-get update && apt-get install -y python3.8 \
          && rm -rf /var/lib/apt/lists/*").
 
@@ -195,11 +195,11 @@ base(distr_version, python_version) :-
 # install recent versions of Python
 base("14.04", python_version) :-
     from(f"ubuntu:${distr_version}"),
-    run(f"apt-get install -y software-properties-common && \
-          add-apt-repository ppa:deadsnakes/ppa && \
-          apt-get update && \
-          apt-get install -y python${python_version && \ 
-          rm -rf /var/lib/apt/lists/*").
+    run(f"apt-get install -y software-properties-common \
+          && add-apt-repository ppa:deadsnakes/ppa \
+          && apt-get update \
+          && apt-get install -y python${python_version} \ 
+          && rm -rf /var/lib/apt/lists/*").
 
 app(distr_version, python_version) :-
     base(distr_version, python_version),
@@ -293,7 +293,7 @@ app(optimisation) :-
     # The following code will produce a single layer,
     # therefore the directory "src" will not be in the resulting image:
     (
-        copy("src", "."),
+        copy("src", "src"),
         (optimisation = "on", run("cd src; make install-opt");
          optimisation = "off", run("cd src; make install")),
         run("rm -rf src")
@@ -363,7 +363,7 @@ We need some initial example.
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <h2 class="featurette-heading" id="case-study-program-repair">Case Study: Reproducible Research</h2>
-        <p class="lead">Modus can build run program repair experiments.</p>
+        <p class="lead">Modus can run program repair experiments.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
