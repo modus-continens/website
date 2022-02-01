@@ -284,18 +284,23 @@ release :-
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <h2 class="featurette-heading" id="optimising-image-size">Optimising Image Size</h2>
-        <p class="lead">Container images often include redundant files in their layers, which slows down their transfer through the network and compromises security by increasing the attack surface. By allowing the user to encode precise dependencies, such as the software packages to install or files to copy into the image, Modus helps to optimise the image size. Besides, Modus provides additional tools to reduce the image size such as the operator <code>::merge</code> that merges several layers into one.</p>
+        <p class="lead">Container images often include redundant files in their layers, which slows down their transfer through the network and compromises security by increasing the attack surface. By allowing the user to encode precise dependencies, such as software packages to install or files to copy into the image, Modus helps to optimise the image size. Besides, Modus provides tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
-app(optimisation) :-
+app(build_mode) :-
     from("gcc:latest"),
     # The following code will produce a single layer,
-    # therefore the directory "src" will not be in the resulting image:
+    # therefore the directory "src" will not be stored in the resulting image:
     (
         copy("src", "src"),
-        (optimisation = "on", run("cd src; make install-opt");
-         optimisation = "off", run("cd src; make install")),
+        (
+            build_mode = "release", 
+            run("cd src; make install")
+        ;
+            build_mode = "debug",
+            run("cd src; make -e install")::in_env("CFLAGS", "-g")
+        ),
         run("rm -rf src")
     )::merge.
         </code></pre>
