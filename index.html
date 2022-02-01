@@ -77,15 +77,15 @@
           following goals:
         <ul>
           <li>
-            <strong>Maintainability:</strong> make build definitions maintainable by enabling modularity, code reuse and
-            automatic dependency resolution.
+            <strong>Maintainability:</strong> make build definitions maintainable by enabling <a href="#modularity-and-code-reuse">modularity, code reuse</a> and
+            <a href="#dependency-resolution">automatic dependency resolution</a>.
           </li>
           <li>
-            <strong>Efficiency:</strong> make builds efficient by automatic parallelisation and fine-grained caching;
-            provide tools for optimising the image size.
+            <strong>Efficiency:</strong> make builds efficient by <a href="#parallel-builds">parallelisation</a> and <a href="#fine-grained-caching">fine-grained caching</a>;
+            provide tools for <a href="#optimising-image-size">optimising image size</a>.
           </li>
           <li>
-            <strong>Expressiveness:</strong> enable the user to express complex build workflows.
+            <strong>Expressiveness:</strong> enable the user to express <a href="#ico-image-properties">complex build workflows</a> in an <a href="#intuitive-build-model">intuitive way</a>.
           </li>
           <li>
             <strong>Simplicity:</strong> provide minimalistic syntax, well-defined, non-Turing-complete semantics, and
@@ -109,29 +109,31 @@
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Intuitive Build Model</h2>
-        <p class="lead">The key insight of Modus is that the model of container image builds, as in <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a> and <a href="https://github.com/moby/buildkit">BuildKit</a>, naturally maps to the formalism of <a href="https://en.wikipedia.org/wiki/Horn_clause">Horn clauses</a>. Modus is a dialect of <a href="https://en.wikipedia.org/wiki/Datalog">Datalog</a>, a practical, non-Turing-complete implementation of Horn clauses, with domain-specific extensions for container builds.</p>
+        <h2 class="featurette-heading" id="intuitive-build-model">Intuitive Build Model</h2>
+        <p class="lead">To be comprehensible and ergonomic, a domain-specific language has to be based on a formalism that naturally maps to the problem domain. This formalism has to be powerful enough to express important problems in the domain. However, the formalism should not be too powerful, because this would create issues with computability and clarity. </p>          
+        <p class="lead">Modus models container builds as <a href="https://docs.modus-continens.com/foundations">a specific kind of logic programming</a>. The semantics of Modus naturally maps to <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a>/<a href="https://github.com/moby/buildkit">BuildKit</a>'s model of container image builds. Modus allows specifying complex build logic, while guaranteeing that build dependencies can always be efficiently resolved. </p>
       </div>
       <div class="col-lg-6 col-md-12">
-Dockerfile:
+Dockerfile is a set of build stages; build stages are sequences of instructions:
         <pre><code class="language-dockerfile">
 FROM ubuntu:20.04 AS base
-RUN apt-get update && apt-get install -y package-foo \
+RUN apt-get update && apt-get install -y python3.8 \
     && rm -rf /var/lib/apt/lists/*
 
 FROM base AS app
-COPY src .
+COPY src src
 RUN cd src && make install
         </code></pre>
-Equivalent Modusfile:
+<em>Modusfile</em> is a set of logical rules; rule bodies are expressions:
         <pre><code class="language-python">
 base :-
-    from("ubuntu:20.04"),
-    run("apt-get update && apt-get install -y package-foo \
+    from(f"ubuntu:20.04"),
+    run("apt-get update && apt-get install -y python3.8 \
          && rm -rf /var/lib/apt/lists/*").
+
 app :-
     base,
-    copy("src", "."),
+    copy("src", "src"),
     run("cd src && make install").
         </code></pre>
       </div>
@@ -141,21 +143,35 @@ app :-
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Parameterised Builds</h2>
-        <p class="lead">Container images are intrinsically parameterised. For example, the image <code>python:3.9-slim-bullseye</code> is parameterised with the Python version <code>3.9</code> and the distribution options <code>slim</code> and <code>bullseye</code>. Being a Datalog dialect, Modus explicitly handles image parameters.</p>
+        <h2 class="featurette-heading" id="parameterised-builds">Parameterised Builds</h2>
+        <p class="lead">Container images are intrinsically parameterised. For example, the image <code>python:3.9-slim-bullseye</code> is parameterised with the Python version <code>3.9</code> and the distribution options <code>slim</code> and <code>bullseye</code>. Interactions between these parameters determine how the images are built. Modus explicitly handles parameters and their interactions.</p>
       </div>
       <div class="col-lg-6 col-md-12">
-        <pre><code class="language-python">
-# The pylint image predicate is parameterised with
-# Python's version, and Ubuntu's version.
-pylint(python_version, "ubuntu", ubuntu_version) :-
-    python(python_version, "ubuntu", ubuntu_version),
-    run("pip install pylint").
+        In Dockerfile, build parameters are global variables; interactions between parameters cannot be expressed:
+        <pre><code class="language-dockerfile">
+ARG DISTR_VERSION=20.04
+FROM ubuntu:${DISTR_VERSION} AS base
+ARG PYTHON_VERSION=3.8
+RUN apt-get update && apt-get install -y python${PYTHON_VERSION} \
+    && rm -rf /var/lib/apt/lists/*
 
-python(python_version, "ubuntu", distr_version) :-
-    # Formatted strings are used to simplify string manipulation:
+FROM base AS app
+COPY src src
+RUN cd src && make install
+        </code></pre>
+In <em>Modusfile</em>, parameters and their dependencies are explicit:
+        <pre><code class="language-python">
+base(distr_version, python_version) :-
     from(f"ubuntu:${distr_version}"),
-    run(f"apt-get install -y python${python_version}").
+    run(f"apt-get update && apt-get install -y python${python_version} \
+          && rm -rf /var/lib/apt/lists/*").
+
+app(distr_version, python_version) :-
+    base(distr_version, python_version),
+    copy("src", "src"),
+    run("cd src && make install").
+
+app :- app("20.04", "3.8").
         </code></pre>
       </div>
     </div>
@@ -164,28 +180,31 @@ python(python_version, "ubuntu", distr_version) :-
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Dependency Resolution</h2>
-        <p class="lead">Image parameters affect the sequence of operations required to build the target image. Modus enables the user to describe complex interactions between image parameters. It then uses a Datalog solver to resolve dependencies and statically compute the build graph.</p>
+        <h2 class="featurette-heading" id="dependency-resolution">Dependency Resolution</h2>
+        <p class="lead">Image parameters affect the sequence of operations required to build the target image. Modus enables the user to describe complex interactions between image parameters as logical relations. It then uses a logic inference engine to resolve dependencies and statically compute the build graph.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
-python(python_version, "fedora", distr_version) :-
-    from(f"fedora:${distr_version}"),
-    run(f"dnf install python${python_version}").
-
-python(python_version, "ubuntu", distr_version) :-
+base(distr_version, python_version) :-
     (distr_version = "16.04"; distr_version = "18.04"; distr_version = "20.04"),
     from(f"ubuntu:${distr_version}"),
-    run(f"apt-get install -y python${python_version}").
+    run(f"apt-get update && apt-get install -y python${python_version} \
+          && rm -rf /var/lib/apt/lists/*").
 
 # Ubuntu 14.04 requires adding third-party repositories to
 # install recent versions of Python
-python(python_version, "ubuntu", "14.04") :-
+base("14.04", python_version) :-
     from(f"ubuntu:${distr_version}"),
     run(f"apt-get install -y software-properties-common && \
           add-apt-repository ppa:deadsnakes/ppa && \
           apt-get update && \
-          apt-get install -y python${python_version}").
+          apt-get install -y python${python_version}",
+          && rm -rf /var/lib/apt/lists/*").
+
+app(distr_version, python_version) :-
+    base(distr_version, python_version),
+    copy("src", "src"),
+    run("cd src && make install").
         </code></pre>
       </div>
     </div>
@@ -194,17 +213,18 @@ python(python_version, "ubuntu", "14.04") :-
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Standard Library</h2>
+        <h2 class="featurette-heading" id="standard-library">Standard Library</h2>
         <p class="lead">Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
         <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates &raquo;</a></p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
-python(python_version, "ubuntu", distr_version) :-
+base(distr_version, python_version) :-
     # The rule is applied if Ubuntu's version is greater or equal to 16.04
     semver_geq(distr_version, "16.04"),
     from(f"ubuntu:${distr_version}"),
-    run(f"apt-get install -y python${python_version}").
+    run(f"apt-get update && apt-get install -y python${python_version} \
+          && rm -rf /var/lib/apt/lists/*").
         </code></pre>
       </div>
     </div>
@@ -213,16 +233,16 @@ python(python_version, "ubuntu", distr_version) :-
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Parallel Builds</h2>
-        <p class="lead">Thanks to static computation of the build graph, Modus aggressively parallelises build execution. It also allows building multiple images at the same time.</p>
-        <p class="lead">In this example, the build query <code>python("3.8", "ubuntu", X), semver_geq(X, "18.04")</code> for the previously introduced Modusfile resulted in the parallel build of two images: <code>python("3.8", "ubuntu", "20.04")</code> and <code>python("3.8", "ubuntu", "18.04")</code>.</p>
+        <h2 class="featurette-heading" id="parallel-builds">Parallel Builds</h2>
+        <p class="lead">Building container images can be time consuming. Thanks to the statically computed build graph, Modus aggressively parallelises build execution. It also allows building multiple images at the same time.</p>
+        <p class="lead">In this example, the build query <code></code> for the previously introduced Modusfile resulted in the parallel build of two images: <code>app("20.04", "3.8")</code> and <code>app("18.04", "3.8")</code>.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-shell">
-$ modus build . 'python("3.8", "ubuntu", X), semver_geq(X, "18.04")'
-Exporting 1/2: python("3.8", "ubuntu", "20.04")
+$ modus build . 'app(X, "3.8"), semver_geq(X, "18.04")'
+Exporting 1/2: app("20.04", "3.8")
 sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
-Exporting 2/2: python("3.8", "ubuntu", "18.04")
+Exporting 2/2: app("18.04", "3.8")
 sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
         </code></pre>
       </div>
@@ -232,7 +252,7 @@ sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">OCI Image Properties and Build Instructions</h2>
+        <h2 class="featurette-heading" id="ico-image-properties">OCI Image Properties and Build Instructions</h2>
         <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
         <p><a href="https://docs.modus-continens.com/library/">List of operators &raquo;</a></p>
       </div>
@@ -248,7 +268,8 @@ builder(go_version) :-
         ::in_env("CGO_ENABLED", "0")
         ::in_env("GOOS", "linux").
 
-release :- (
+release :-
+    (
         from("alpine:latest")::set_workdir("/root"),
         run("apk --no-cache add ca-certificates"),
         # Copying files from another image for multi-stage build:
@@ -262,8 +283,8 @@ release :- (
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Optimising Image Size</h2>
-        <p class="lead">Encoding precise dependencies helps to optimise the resulting image size. Besides, Modus provides additional tools to reduce the image size such as the operator <code>::merge</code> that merges several layers into one.</p>
+        <h2 class="featurette-heading" id="optimising-image-size">Optimising Image Size</h2>
+        <p class="lead">Container images often include redundant files in their layers, which slows down their transfer through the network and compromises security by increasing the attack surface. By allowing the user to encode precise dependencies, such as the software packages to install or files to copy into the image, Modus helps to optimise the image size. Besides, Modus provides additional tools to reduce the image size such as the operator <code>::merge</code> that merges several layers into one.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
@@ -285,8 +306,8 @@ app(optimisation) :-
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">User-Defined Commands</h2>
-        <p class="lead">Modus allows users to define their own commands, such as layer building functions or logical predicates, which facilitates modularity and code reuse.</p>
+        <h2 class="featurette-heading" id="modularity-and-code-reuse">Modularity & Code Reuse</h2>
+        <p class="lead">Just like any code, container build scripts evolve and require maintenance. Modus supports code evolution and maintenance by providing tools for modularity and code reuse. For example, Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
@@ -313,7 +334,7 @@ app :-
 
     <div class="row">
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading">Fine-Grained Caching <span class="badge bg-warning">WIP</span></h2>
+        <h2 class="featurette-heading" id="fine-grained-caching">Fine-Grained Caching <span class="badge bg-warning">WIP</span></h2>
         <p class="lead">Modus allows users to define custom cache invalidation predicates to ensure predictable cache behavior and optimise build time.</p>
       </div>
       <div class="col-lg-6 col-md-12">
@@ -322,6 +343,35 @@ We need some initial example.
          </code></pre>
       </div>
     </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <h2 class="featurette-heading" id="case-study-openjdk-images">Case Study: Building OpenJDK Images</h2>
+        <p class="lead">Modus can build OpenJDK images.</p>
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <pre><code class="language-python">
+We need some initial example.
+         </code></pre>
+      </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <h2 class="featurette-heading" id="case-study-program-repair">Case Study: Reproducible Research</h2>
+        <p class="lead">Modus can build run program repair experiments.</p>
+      </div>
+      <div class="col-lg-6 col-md-12">
+        <pre><code class="language-python">
+We need some initial example.
+         </code></pre>
+      </div>
+    </div>
+
 
     <hr class="featurette-divider">
 
