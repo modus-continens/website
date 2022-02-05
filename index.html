@@ -38,6 +38,8 @@
   <link href="modus.css" rel="stylesheet">
 </head>
 
+<body class="pb-0 mb-0">
+
 <nav class="navbar navbar-expand-lg navbar-light modus-bg mb-0" aria-label="Modus navbar">
   <div class="container">
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#modusNavbar"
@@ -67,13 +69,13 @@
   <div class="p-5">
     <div class="container">
       <div>
-        <h1>Modus is a language for building OCI container images</h1>
+        <h1 class="modus-title">Modus is a language for building OCI container images</h1>
 
         <!-- Place this tag where you want the button to render. -->
         <a class="github-button" href="https://github.com/modus-continens/modus" data-icon="octicon-star"
           data-size="large" data-show-count="true" aria-label="Star modus-continens/modus on GitHub">Star</a>
 
-    <div class="row">
+    <div class="row mt-2">
       <div class="col-lg-8 col-md-12">
         <p class="lead">Modus uses logic programming to address pain points of Dockerfiles' users: defining complex build logic, parallelising containerised task execution, and optimising image size. </p>
         <!-- Place this tag where you want the button to render. -->
@@ -89,11 +91,11 @@
 </div>
 
 
-<div class="marketing">
+<div>
 
-  <div class="bg-light p-3">
+  <div class="bg-light p-5">
     <div class="container">
-      <h2 class="featurette-heading" id="parameterised-builds">Modus vs Dockerfiles</h2>
+      <h2 class="featurette-heading" id="parameterised-builds">Modus vs. Dockerfiles</h2>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -121,7 +123,7 @@
           <tr>
             <th scope="row">Image size</th>
             <td>Tend to produce redundant layers with more files and packages than required.</td>
-            <td>Encodes precise dependencies to avoid redundencies; merges unnecessary layers.</td>
+            <td>Encodes precise dependencies to avoid redundancies; merges unnecessary layers.</td>
           </tr>
           <tr>
             <th scope="row">Maintainability</th>
@@ -132,8 +134,10 @@
       </table>
     </div>
   </div>
+
   <div>
-    <div class="container p-3">
+    <div class="p-5">
+    <div class="container">
       <h2 class="featurette-heading" id="parameterised-builds">Parameterised Builds</h2>
       <div class="row">
         <div class="col-lg-6 col-md-12">
@@ -159,7 +163,7 @@ FROM {{
     end
 }}
             </code></pre>
-            <p><a href="https://github.com/modus-continens/openjdk-images-case-study/blob/main/linux.Modusfile">An equivalent Modusfile</a> naturally expresses this fragment without external tools:</p>
+            <p>An <a href="https://github.com/modus-continens/openjdk-images-case-study/blob/main/linux.Modusfile">equivalent Modusfile</a> naturally expresses this fragment without external tools:</p>
             <pre><code class="language-python">
 debian_image(variant, java_type) :-
     (
@@ -180,105 +184,52 @@ debian_image(variant, java_type) :-
         </div>
       </div>
     </div>
+    </div>
 
-  <div class="bg-light p-3">
+  <div class="bg-light p-5">
     <div class="container">
     <div class="row">
+      <h2 class="featurette-heading" id="parallel-builds">Complex, Reproducible Workflows</h2>
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="parallel-builds">Complex, Reproducible Workflows</h2>
         <p class="lead">Building software, executing CI/CD actions, or conducting empirical computer science research require defining complex, reproducible workflows, and executing them efficiently. Dockerfiles cannot express complex workflows. Modus is a general-purpose, build system agnostic tool that can containerise your workflows, make them more reproducible, and optimise via automatic caching and parallelisation.</p>
-        <p class="lead">Computer science research suffers from <a href="https://cacm.acm.org/magazines/2020/8/246369-threats-of-a-replication-crisis-in-empirical-computer-science/fulltext">replication crisis</a>; automated program repair, an area of software engineering research, is not an exception. Automated program repair experiments involve building, testing and analysing complex software projects. Modus automated experimental workflows of the well-known ManyBugs benchmark using XXX LoC, compared to YYY LoC of existing scripts, reduced experiments execution time by ZZ%, while enhansing reproducibility.</p>
+        <p class="lead">Computer science research suffers from <a href="https://cacm.acm.org/magazines/2020/8/246369-threats-of-a-replication-crisis-in-empirical-computer-science/fulltext">replication crisis</a>; automated program repair, an area of software engineering research, is not an exception. Automated program repair experiments involve building, testing, analysing and transforming complex software projects. Modus automated experimental workflows of the well-known <a href="https://repairbenchmarks.cs.umass.edu/">ManyBugs</a> benchmark using XXX LoC, compared to YYY LoC of existing scripts, reduced experiments execution time by ZZ%, while enhansing reproducibility.</p>
         <p><a href="https://github.com/modus-continens/program-repair-case-study">Program repair case study &raquo;</a></p>        
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-shell">
-$ modus build . 'app(X, "3.8"), semver_geq(X, "18.04")'
-Exporting 1/2: app("20.04", "3.8")
-sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
-Exporting 2/2: app("18.04", "3.8")
-sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
+TODO            
         </code></pre>
       </div>
     </div>
       </div>
     </div>
     
-    <hr class="featurette-divider">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
+  <div class="p-5">
+    <div class="container">
+      <div class="row">
         <h2 class="featurette-heading" id="parallel-builds">Parallel Builds</h2>
-        <p class="lead">Building container images can be time consuming. Thanks to the statically computed build graph, Modus aggressively parallelises build execution. It also allows building multiple images at the same time.</p>
-        <p class="lead">In this example, the build query <code></code> for the previously introduced Modusfile resulted in the parallel build of two images: <code>app("20.04", "3.8")</code> and <code>app("18.04", "3.8")</code>.</p>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <pre><code class="language-shell">
-$ modus build . 'app(X, "3.8"), semver_geq(X, "18.04")'
-Exporting 1/2: app("20.04", "3.8")
-sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
-Exporting 2/2: app("18.04", "3.8")
-sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
-        </code></pre>
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="standard-library">Standard Library</h2>
-        <p class="lead">Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
-        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates &raquo;</a></p>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <pre><code class="language-python">
-base(distr_version, python_version) :-
-    # The rule is applied if Ubuntu's version is greater or equal to 16.04
-    semver_geq(distr_version, "16.04"),
-    from(f"ubuntu:${distr_version}"),
-    run(f"apt-get update && apt-get install -y python${python_version} \
-          && rm -rf /var/lib/apt/lists/*").
-        </code></pre>
+        <div class="col-lg-6 col-md-12">
+          <p class="lead">Building container images can be time consuming. Thanks to the statically computed build graph, Modus aggressively parallelises build execution. It also allows building multiple images at the same time. <a href="https://github.com/moby/buildkit">BuildKit</a></p>
+          <p class="lead">In this example, the build query <code></code> for the previously introduced Modusfile resulted in the parallel build of two images: <code>app("20.04", "3.8")</code> and <code>app("18.04", "3.8")</code>.</p>
+        </div>
+        <div class="col-lg-6 col-md-12">
+          <pre><code class="language-shell">
+              $ modus build . 'app(X, "3.8"), semver_geq(X, "18.04")'
+              Exporting 1/2: app("20.04", "3.8")
+              sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
+              Exporting 2/2: app("18.04", "3.8")
+              sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
+          </code></pre>
+        </div>
       </div>
     </div>
+  </div>
 
-
-    <hr class="featurette-divider">
-
+  <div class="bg-light p-5">
+    <div class="container">
     <div class="row">
+      <h2 class="featurette-heading" id="optimising-image-size">Optimising Image Size</h2>
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="ico-image-properties">OCI Image Properties and Build Instructions</h2>
-        <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
-        <p><a href="https://docs.modus-continens.com/library/">List of operators &raquo;</a></p>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <pre><code class="language-python">
-builder(go_version) :-
-    from(f"golang:${go_version}")
-        ::set_workdir("/go/src/github.com/alexellis/href-counter/"),
-    run("go get -d -v golang.org/x/net/html"),
-    copy("app.go", "."),
-    # Executing the build command in a specific environment:
-    run("go build -a -installsuffix cgo -o app .")
-        ::in_env("CGO_ENABLED", "0")
-        ::in_env("GOOS", "linux").
-
-release :-
-    (
-        from("alpine:latest")::set_workdir("/root"),
-        run("apk --no-cache add ca-certificates"),
-        # Copying files from another image for multi-stage build:
-        builder("1.16")::copy("/go/src/github.com/alexellis/href-counter/app", ".")
-    )::set_entrypoint("./app").
-        </code></pre>
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="optimising-image-size">Optimising Image Size</h2>
         <p class="lead">Container images often include redundant files in their layers, which slows down their transfer through the network and compromises security by increasing the attack surface. By allowing the user to encode precise dependencies, such as software packages to install or files to copy into the image, Modus helps to optimise the image size. Besides, Modus provides tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
       </div>
       <div class="col-lg-6 col-md-12">
@@ -301,13 +252,19 @@ app(build_mode) :-
         </code></pre>
       </div>
     </div>
+      </div>
+    </div>
 
-    <hr class="featurette-divider">
-
+  <div class="p-5">
+    <div class="container">
     <div class="row">
       <div class="col-lg-6 col-md-12">
         <h2 class="featurette-heading" id="modularity-and-code-reuse">Modularity & Code Reuse</h2>
         <p class="lead">Just like any code, container build scripts evolve and require maintenance. Modus supports code evolution and maintenance by providing tools for modularity and code reuse. For example, Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows.</p>
+        <p class="lead">Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
+        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates &raquo;</a></p>
+<p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
+        <p><a href="https://docs.modus-continens.com/library/">List of operators &raquo;</a></p>        
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
@@ -327,100 +284,51 @@ app :-
         install("libb", "4.1")
     )::merge.
         </code></pre>
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="fine-grained-caching">Fine-Grained Caching <span class="badge bg-warning">WIP</span></h2>
-        <p class="lead">Modus allows users to define custom cache invalidation predicates to ensure predictable cache behavior and optimise build time.</p>
-      </div>
-      <div class="col-lg-6 col-md-12">
         <pre><code class="language-python">
-We need some initial example.
-         </code></pre>
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="case-study-openjdk-images">Case Study: Building OpenJDK Images</h2>
-        <p class="lead">Modus can build OpenJDK images.</p>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <pre><code class="language-python">
-We need some initial example.
-         </code></pre>
-      </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="case-study-program-repair">Case Study: Reproducible Research</h2>
-        <p class="lead">Modus can run program repair experiments.</p>
-      </div>
-      <div class="col-lg-6 col-md-12">
-        <pre><code class="language-python">
-We need some initial example.
-         </code></pre>
-      </div>
-    </div>
-
-
-    <hr class="featurette-divider">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="intuitive-build-model">Intuitive Build Model</h2>
-        <p class="lead">To be comprehensible and ergonomic, a domain-specific language has to be based on a formalism that naturally maps to the problem domain. This formalism has to be powerful enough to express important problems in the domain. However, the formalism should not be too powerful, because this would create issues with computability and clarity. </p>          
-        <p class="lead">Modus models container builds as <a href="https://docs.modus-continens.com/foundations">a specific kind of logic programming</a>. The semantics of Modus naturally maps to <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a>/<a href="https://github.com/moby/buildkit">BuildKit</a>'s model of container image builds. Modus allows specifying complex build logic, while guaranteeing that build dependencies can always be efficiently resolved. Sweet spot between expressiveness and computability.</p>
-      </div>
-      <div class="col-lg-6 col-md-12">
-Dockerfile is a set of build stages; build stages are sequences of instructions:
-        <pre><code class="language-dockerfile">
-FROM ubuntu:20.04 AS base
-RUN apt-get update && apt-get install -y python3.8 \
-    && rm -rf /var/lib/apt/lists/*
-
-FROM base AS app
-COPY src src
-RUN cd src && make install
+base(distr_version, python_version) :-
+    # The rule is applied if Ubuntu's version is greater or equal to 16.04
+    semver_geq(distr_version, "16.04"),
+    from(f"ubuntu:${distr_version}"),
+    run(f"apt-get update && apt-get install -y python${python_version} \
+          && rm -rf /var/lib/apt/lists/*").
         </code></pre>
-<em>Modusfile</em> is a set of logical rules; rule bodies are expressions:
         <pre><code class="language-python">
-base :-
-    from("ubuntu:20.04"),
-    run("apt-get update && apt-get install -y python3.8 \
-         && rm -rf /var/lib/apt/lists/*").
+builder(go_version) :-
+    from(f"golang:${go_version}")
+        ::set_workdir("/go/src/github.com/alexellis/href-counter/"),
+    run("go get -d -v golang.org/x/net/html"),
+    copy("app.go", "."),
+    # Executing the build command in a specific environment:
+    run("go build -a -installsuffix cgo -o app .")
+        ::in_env("CGO_ENABLED", "0")
+        ::in_env("GOOS", "linux").
 
-app :-
-    base,
-    copy("src", "src"),
-    run("cd src && make install").
+release :-
+    (
+        from("alpine:latest")::set_workdir("/root"),
+        run("apk --no-cache add ca-certificates"),
+        # Copying files from another image for multi-stage build:
+        builder("1.16")::copy("/go/src/github.com/alexellis/href-counter/app", ".")
+    )::set_entrypoint("./app").
         </code></pre>
       </div>
     </div>
-
-    <hr class="featurette-divider">
-
+      </div>
+    </div>
+  
 
   </div>
 
-  <footer>
-    <p>Modus is distributed under <a href="https://www.gnu.org/licenses/agpl-3.0.txt">GNU Affero General Public
-        License v3.0</a>. &copy; 2022 University College London.</p>
-  </footer>
+  <div class="bg-light p-5">
+    <div class="container">
+      <footer>
+        <p>Modus is distributed under <a href="https://www.gnu.org/licenses/agpl-3.0.txt">GNU Affero General Public
+            License v3.0</a>. &copy; 2022 University College London.</p>
+      </footer>
+    </div>
+  </div>
 
 </div>
-
-</main>
-
 
 <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 <script async defer src="https://buttons.github.io/buttons.js"></script>

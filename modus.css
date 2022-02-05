@@ -6,6 +6,10 @@ body {
   margin-bottom: 20px;
 }
 
+.modus-title {
+    margin-top: 0.5em;
+}
+
 .modus-bg {
   background-color: #8ec5fc25;
   background-image: linear-gradient(62deg, #8EC5FC25 0%, #E0C3FC25 100%);
