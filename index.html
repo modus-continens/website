@@ -118,7 +118,7 @@
           <tr>
             <th scope="row">Parallelisation</th>
             <td>When using generators/scripts for custom logic, parallelisation is ineffective.</td>
-            <td>Parallelises builds involving custom logic and dependency resolution.</td>
+            <td>Agressively parallelises builds involving custom logic.</td>
           </tr>
           <tr>
             <th scope="row">Image size</th>
@@ -209,16 +209,20 @@ TODO
       <div class="row">
         <h2 class="featurette-heading" id="parallel-builds">Parallel Builds</h2>
         <div class="col-lg-6 col-md-12">
-          <p class="lead">Building container images can be time consuming. Thanks to the statically computed build graph, Modus aggressively parallelises build execution. It also allows building multiple images at the same time. <a href="https://github.com/moby/buildkit">BuildKit</a></p>
-          <p class="lead">In this example, the build query <code></code> for the previously introduced Modusfile resulted in the parallel build of two images: <code>app("20.04", "3.8")</code> and <code>app("18.04", "3.8")</code>.</p>
+          <p class="lead">Building container images is time-consuming. Although Dockerfile builds can be automatically parallelised, using <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfile generators</a> or <a href="https://github.com/containers/buildah">Buildah shell scripts</a> for defining custom logic makes parallelisation impossible or ineffective.</p>
+          <p class="lead">Modus unlocks the full potential of build parallelisation by statically constructing the build graph, and using <a href="https://github.com/moby/buildkit">BuildKit</a> to agressively paralellise execution. Modus can build multiple images in parallel while maximally reusing shared layers across them.</p>
         </div>
         <div class="col-lg-6 col-md-12">
+          <p>The query <code>openjdk(version, "jdk", variant), number_gt(version, 11)</code> for <a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK Modusfile</a> builds all variants of all JDK versions greater than 11. Modus builds 23 images in parallel, reusing intermediate layers accross images:</p>
           <pre><code class="language-shell">
-              $ modus build . 'app(X, "3.8"), semver_geq(X, "18.04")'
-              Exporting 1/2: app("20.04", "3.8")
-              sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
-              Exporting 2/2: app("18.04", "3.8")
-              sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
+$ modus build . 'openjdk(version, "jdk", variant), number_gt(version, 11)'
+Exporting 1/23: openjdk("17", "jdk", "bullseye") -> 
+sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
+Exporting 2/23: openjdk("17", "jdk", "slim-buster") ->
+sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
+...
+Exporting 23/23: openjdk("18", "jdk", "buster") ->
+sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
           </code></pre>
         </div>
       </div>
@@ -230,14 +234,14 @@ TODO
     <div class="row">
       <h2 class="featurette-heading" id="optimising-image-size">Optimising Image Size</h2>
       <div class="col-lg-6 col-md-12">
-        <p class="lead">Container images often include redundant files in their layers, which slows down their transfer through the network and compromises security by increasing the attack surface. By allowing the user to encode precise dependencies, such as software packages to install or files to copy into the image, Modus helps to optimise the image size. Besides, Modus provides tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
+        <p class="lead">Container images often include redundant layers, files and installed packages, which greatly increases their size, slows down their transfer through network, and compromises security by increasing the attack surface. Dockerfiles cannot conditionally install packages and copy files based on the build configuration, and do not provide tool for fine-grained control of layers.</p>
+        <p class="lead">Modus enables the user to precisely define files and software packages required for their build configuration. Besides, Modus provides tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
       </div>
       <div class="col-lg-6 col-md-12">
+        <p>The operator <code>::merge</code> is applied to a fragment of code to ensure that it will produce a single layers. As a result, the directory <code>src</code> will not be stored in an intermediate layer:</p>
         <pre><code class="language-python">
 app(build_mode) :-
     from("gcc:latest"),
-    # The following code will produce a single layer,
-    # therefore the directory "src" will not be stored in the resulting image:
     (
         copy("src", "src"),
         (
@@ -258,17 +262,17 @@ app(build_mode) :-
   <div class="p-5">
     <div class="container">
     <div class="row">
+      <h2 class="featurette-heading" id="modularity-and-code-reuse">Modularity & Code Reuse</h2>
       <div class="col-lg-6 col-md-12">
-        <h2 class="featurette-heading" id="modularity-and-code-reuse">Modularity & Code Reuse</h2>
-        <p class="lead">Just like any code, container build scripts evolve and require maintenance. Modus supports code evolution and maintenance by providing tools for modularity and code reuse. For example, Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows.</p>
-        <p class="lead">Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
-        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates &raquo;</a></p>
-<p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
-        <p><a href="https://docs.modus-continens.com/library/">List of operators &raquo;</a></p>        
+        <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide any tools for modularity and code reuse. Besides, to optimise image size, they require structuring code in an way that harms readability.</p>
+        <p class="lead">Modus supports code evolution and maintenance by providing zero-cose modularity and code reuse. For example, Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows. Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
+        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates &raquo;</a></p>        
+        <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
+        <p><a href="https://docs.modus-continens.com/library/">List of operators &raquo;</a></p>
       </div>
       <div class="col-lg-6 col-md-12">
+        <p>Using a user-defined predicate <code>install</code> to reuse library installation code:</p>
         <pre><code class="language-python">
-# User-defined layer predicate for installing libraries
 install(lib, version) :-
     run(f"wget https://example.com/releases/${lib}-v${version}.tar.gz && \
           tar xf ${lib}-v${version}.tar.gz && \
@@ -279,19 +283,18 @@ install(lib, version) :-
 
 app :-
     from("gcc:latest"),
-    (
-        install("liba", "1.3.5"),
-        install("libb", "4.1")
-    )::merge.
+    install("liba", "1.3.5"),
+    install("libb", "4.1").
         </code></pre>
+        <p>Using a standard library predicate <code>semver_geq</code> to compare versions of Ubuntu:</p> 
         <pre><code class="language-python">
 base(distr_version, python_version) :-
-    # The rule is applied if Ubuntu's version is greater or equal to 16.04
     semver_geq(distr_version, "16.04"),
     from(f"ubuntu:${distr_version}"),
     run(f"apt-get update && apt-get install -y python${python_version} \
           && rm -rf /var/lib/apt/lists/*").
         </code></pre>
+        <p>Using a standard library operator <code>::copy</code> to copy files from another build stage</p>
         <pre><code class="language-python">
 builder(go_version) :-
     from(f"golang:${go_version}")
