@@ -77,8 +77,12 @@
 
     <div class="row mt-2">
       <div class="col-lg-8 col-md-12">
-        <p class="lead">Modus uses logic programming to address pain points of Dockerfiles: implementing complex build logic, parallelising builds, optimising image size, and maintaining build definitions.</p>
-        <!-- Place this tag where you want the button to render. -->
+	<p class="lead">Modus uses logic programming to solve key pain points of
+	Dockerfiles &mdash; no way to express dependencies among options, inability to specify complex
+	builds, difficult and inefficient parallelisation, bloated images, and
+	costly maintenance.</p>
+
+         <!-- Place this tag where you want the button to render. -->
         <p>
           <a class="btn btn-primary mt-0" href="https://github.com/modus-continens/modus/blob/main/GETTING_STARTED.md"
             role="button">Getting Started &raquo;</a>
@@ -95,7 +99,8 @@
 
   <div class="bg-light p-5">
     <div class="container">
-      <h2 class="featurette-heading" id="parameterised-builds">Modus vs. Dockerfiles</h2>
+      <h2 class="featurette-heading" id="parameterised-builds">Modus vs.
+	      Dockerfiles @Sergey: title order does not match column order</h2>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -106,29 +111,29 @@
         </thead>
         <tbody>
           <tr>
-            <th scope="row">Paramertisation</th>
-            <td>Build parameters are global variables; their dependencies are not tracked.</td>
-            <td>Parameters are local variables, their dependencies are resolved automatically.</td>
+            <th scope="row">Dependencies</th>
+            <td>Do not track dependencies among build parameters.</td>
+            <td>Tracks and automatically resolves dependencies among build parameters.</td>
           </tr>
           <tr>
             <th scope="row">Build Logic</th>
-            <td>Only linear sequences of build instructions.</td>
-            <td>Custom build logic, yet guaranteed predicable performance.</td>
+            <td>Express only linear sequences of build instructions.</td>
+            <td>Expresses custom build logic, yet guaranteed predicable performance.</td>
           </tr>
           <tr>
             <th scope="row">Parallelisation</th>
-            <td>When using generators/scripts for custom logic, parallelisation is ineffective.</td>
-            <td>Agressively parallelises builds involving custom logic.</td>
+            <td>Resort to generators/scripts for custom logic and tend to achieve suboptimal parallelisation.</td>
+            <td>Aggressively parallelises builds involving custom logic.</td>
           </tr>
           <tr>
             <th scope="row">Image size</th>
-            <td>Tend to produce redundant layers with more files and packages than required.</td>
-            <td>Encodes precise dependencies to avoid redundancies; merges unnecessary layers.</td>
+            <td>Tend to produce both redundant layers and layers with more files and packages than required.</td>
+	    <td>Avoids redundancies and permits merging unnecessary layers via its precise dependencies encoding.</td>
           </tr>
           <tr>
             <th scope="row">Maintainability</th>
-            <td>Hard to maintain because of hard-coded configuration, no code reuse.</td>
-            <td>Easy to maintain because of zero-cost modularity and code reuse.</td>
+            <td>Rely on hard-coded configuration and lack code reuse, so they're hard to maintain.</td>
+            <td>Provides zero-cost modularity and code reuse, so they're easy to maintain.</td>
           </tr>
         </tbody>
       </table>
@@ -138,12 +143,11 @@
   <div>
     <div class="p-5">
     <div class="container">
-      <h2 class="featurette-heading" id="parameterised-builds">Parameterised Builds</h2>
+      <h2 class="featurette-heading" id="parameterised-builds">Build Parameter Dependencies</h2>
       <div class="row">
         <div class="col-lg-6 col-md-12">
-          <p class="lead">Container images are intrinsically parameterised, e.g. <code>python:3.9-slim-bullseye</code> is parameterised with Python's version <code>3.9</code> and Debian's options <code>slim</code> and <code>bullseye</code>. Interactions between parameters determine how images are built. Dockerfiles only support parameters as global variables, and do not handle dependencies between them. Developers either <a href="https://github.com/klee/klee/blob/0ba95edbad26fe70c8132f0731778d94f9609874/Dockerfile#L1-L34">hard-code version and dependencies</a> or implement complex, ad-hoc Dockerfile generators. For example, <a href="https://github.com/docker-library/openjdk">Official OpenJDK Docker Images</a> use a combinations of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfiles templates</a> with embedded JQ queries, <a href="https://github.com/docker-library/bashbrew/blob/1da7341a79651d28fbcc3d14b9176593c4231942/scripts/jq-template.awk">AWK scripts</a> and <a href="https://github.com/docker-library/openjdk/blob/abebf9325fea4606b9759fb3b9257ea3eef40061/apply-templates.sh">Bash scripts</a> to support parametrisation.</p>
-          <p class="lead">Modus capitalises on a strong <a href="https://docs.modus-continens.com/foundations">logic progamming foundation</a> to handle parameters and their dependecies in an intuitive, declarative fashion. Modus decreased the size of build scripts for OpenJDK Docker images from 549 LoC written in three languages to 315 LoC written in a single language. Besides, Modus reduced the build time by 23% because its build model enables more effective parallelisation.</p>
-          <p><a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK images case study &raquo;</a></p>
+          <p class="lead">Container images are intrinsically parameterised, e.g.  <code>python:3.9-slim-bullseye</code> is parameterised with Python's version <code>3.9</code> and Debian's options <code>slim</code> and <code>bullseye</code>. These parameters can, and often do, depend on and interact each other and these interactions determine how images are built. Dockerfiles only support parameters as global variables, and do not handle dependencies between them. Developers either <a href="https://github.com/klee/klee/blob/0ba95edbad26fe70c8132f0731778d94f9609874/Dockerfile#L1-L34">hard-code version dependencies</a> or implement complex, ad-hoc Dockerfile generators. For example, <a href="https://github.com/docker-library/openjdk">Official OpenJDK Docker Images</a> use a combination of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfiles templates</a> with embedded JQ queries, <a href="https://github.com/docker-library/bashbrew/blob/1da7341a79651d28fbcc3d14b9176593c4231942/scripts/jq-template.awk">AWK scripts</a> and <a href="https://github.com/docker-library/openjdk/blob/abebf9325fea4606b9759fb3b9257ea3eef40061/apply-templates.sh">Bash scripts</a> to support parametrisation.</p>
+          <p class="lead">Modus capitalises on a strong <a href="https://docs.modus-continens.com/foundations">logic progamming foundation</a> to handle parameters and their dependecies in an intuitive, declarative fashion. Modus decreased the size of build scripts for OpenJDK Docker images from 549 LoC written in three languages to 315 LoC written in a single language.  Modus also reduced the build time by 23% because its build model enables more effective parallelisation.</p> <p><a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK images case study &raquo;</a></p>
         </div>
         <div class="col-lg-6 col-md-12">
           <p>
@@ -192,7 +196,7 @@ debian_image(variant, java_type) :-
       <h2 class="featurette-heading" id="parallel-builds">Complex, Reproducible Workflows</h2>
       <div class="col-lg-6 col-md-12">
         <p class="lead">Building software, executing CI/CD actions, or conducting empirical computer science research require defining complex, reproducible workflows, and executing them efficiently. Dockerfiles cannot express complex workflows. Modus is a general-purpose, build system agnostic tool that can containerise your workflows, make them more reproducible, and optimise via automatic caching and parallelisation.</p>
-        <p class="lead">Computer science research suffers from <a href="https://cacm.acm.org/magazines/2020/8/246369-threats-of-a-replication-crisis-in-empirical-computer-science/fulltext">replication crisis</a>; automated program repair, an area of software engineering research, is not an exception. Automated program repair experiments involve building, testing, analysing and transforming complex software projects. Modus automated experimental workflows of the well-known <a href="https://repairbenchmarks.cs.umass.edu/">ManyBugs</a> benchmark using XXX LoC, compared to YYY LoC of existing scripts, reduced experiments execution time by ZZ%, while enhansing reproducibility.</p>
+        <p class="lead">Computer science research suffers from a <a href="https://cacm.acm.org/magazines/2020/8/246369-threats-of-a-replication-crisis-in-empirical-computer-science/fulltext">replication crisis</a>; automated program repair, an area of software engineering research, is no exception. Automated program repair experiments involve building, testing, analysing and transforming complex software projects. Modus automated experimental workflows of the well-known <a href="https://repairbenchmarks.cs.umass.edu/">ManyBugs</a> benchmark using XXX LoC, compared to YYY LoC of existing scripts, reduced experiments execution time by ZZ%, while enhancing reproducibility.</p>
         <p><a href="https://github.com/modus-continens/program-repair-case-study">Program repair case study &raquo;</a></p>        
       </div>
       <div class="col-lg-6 col-md-12">
@@ -234,7 +238,11 @@ sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
     <div class="row">
       <h2 class="featurette-heading" id="optimising-image-size">Optimising Image Size</h2>
       <div class="col-lg-6 col-md-12">
-        <p class="lead">Container images often include redundant layers, files and installed packages, which greatly increases their size, slows down their transfer through network, and compromises security by increasing the attack surface. Dockerfiles cannot conditionally install packages and copy files based on the build configuration, and do not provide tool for fine-grained control of layers.</p>
+        <p class="lead">Container images often include redundant layers, files
+	and installed packages, which greatly increases their size, slows down
+	their transfer through network, and compromises security by increasing
+	the attack surface. At Stackoverflow, the question <a href="https://stackoverflow.com/questions/24394243/why-are-docker-container-images-so-large"> Why are Docker container images so large?</a> has 103k views.
+	Dockerfiles cannot conditionally install packages and copy files based on the build configuration, and do not provide tool for fine-grained control of layers.</p>
         <p class="lead">Modus enables the user to precisely define files and software packages required for their build configuration. Besides, Modus provides tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
       </div>
       <div class="col-lg-6 col-md-12">
