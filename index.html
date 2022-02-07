@@ -78,8 +78,8 @@
     <div class="row mt-2">
       <div class="col-lg-8 col-md-12">
 	<p class="lead">Modus uses logic programming to solve key pain points of
-	Dockerfiles &mdash; no way to express dependencies among options, inability to specify complex
-	builds, difficult and inefficient parallelisation, bloated images, and
+	Dockerfiles &mdash; no way to express interaction among parameters, inability to specify complex build
+	workflows, difficult and inefficient parallelisation, bloated images, and
 	costly maintenance.</p>
 
          <!-- Place this tag where you want the button to render. -->
@@ -110,18 +110,18 @@
         </thead>
         <tbody>
           <tr>
-            <th scope="row">Dependencies</th>
+            <th scope="row">Parameter Interaction</th>
             <td>Do not track dependencies among build parameters.</td>
             <td>Tracks and automatically resolves dependencies among build parameters.</td>
           </tr>
           <tr>
-            <th scope="row">Build Logic</th>
+            <th scope="row">Build Workflows</th>
             <td>Express only linear sequences of build instructions.</td>
-            <td>Expresses custom build logic, yet guaranteed predicable performance.</td>
+            <td>Expresses custom build workflows, yet guaranteed predicable performance.</td>
           </tr>
           <tr>
             <th scope="row">Parallelisation</th>
-            <td>Resort to generators/scripts for custom logic and tend to achieve suboptimal parallelisation.</td>
+            <td>Support custom workflows only by resorting to scripts which inefficiently parallelise.</td>
             <td>Aggressively parallelises builds involving custom logic.</td>
           </tr>
           <tr>
