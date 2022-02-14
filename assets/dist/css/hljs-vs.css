@@ -23,7 +23,7 @@ Visual Studio-like style based on original C# coloring by Jason Diamond <jason@d
 }
 
 .hljs-string,
-.hljs-title,
+/* .hljs-title, */
 .hljs-section,
 .hljs-attribute,
 .hljs-literal,
