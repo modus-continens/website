@@ -8,11 +8,7 @@
   <meta name="author" content="Sergey Mechtaev">
   <title>Modus</title>
 
-	<!-- <link href="https://unpkg.com/prismjs@v1.x/themes/prism.css" rel="stylesheet" /> -->
-
-  <link href="assets/dist/css/prism-vs.css" rel="stylesheet" />
-
-
+  <link rel="stylesheet" href="assets/dist/css/hljs-vs.css">
 
   <!-- Bootstrap core CSS -->
   <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -31,6 +27,18 @@
       .bd-placeholder-img-lg {
         font-size: 3.5rem;
       }
+    }
+
+    pre[class^="language-"] {
+      padding: 0.5em;
+      /* margin: .5em 0; */
+      overflow: auto;
+      border: 1px solid #dddddd;
+      /* background-color: white; */
+    }
+
+    .hljs {
+      background-color: transparent !important;
     }
   </style>
 
@@ -58,7 +66,7 @@
         <li class="nav-item">
           <a class="nav-link" href="https://github.com/modus-continens/modus/issues">Issue Tracker</a>
         </li>
-        <a class="nav-link" href="https://discord.gg/bXxwfVE9Kj">Discord</a>        
+        <a class="nav-link" href="https://discord.gg/bXxwfVE9Kj">Discord</a>
         </li>
       </ul>
     </div>
@@ -87,7 +95,7 @@
           <a class="btn btn-primary mt-0" href="https://github.com/modus-continens/modus/blob/main/GETTING_STARTED.md"
             role="button">Get Started</a>
           <a class="btn btn-secondary mt-0" href="https://discord.gg/bXxwfVE9Kj"
-            role="button">Join Community</a>          
+            role="button">Join Community</a>
         </p>
       </div>
     </div>
@@ -169,7 +177,7 @@ FROM {{
 }}
             </code></pre>
             <p>An <a href="https://github.com/modus-continens/openjdk-images-case-study/blob/main/linux.Modusfile">equivalent Modusfile</a> naturally expresses this fragment without external tools:</p>
-            <pre><code class="language-python">
+            <pre><code class="language-modusfile">
 debian_image(variant, java_type) :-
     (
         is_debian_slim(variant, debian_suite),
@@ -198,17 +206,17 @@ debian_image(variant, java_type) :-
       <div class="col-lg-6 col-md-12">
         <p class="lead">Building software, executing CI/CD actions, or conducting empirical computer science research require defining complex, reproducible workflows, and executing them efficiently. Dockerfiles cannot express complex workflows. Modus is a general-purpose, build system agnostic tool that can containerise your workflows, make them more reproducible, and optimise via automatic caching and parallelisation.</p>
         <p class="lead">Computer science research suffers from a <a href="https://cacm.acm.org/magazines/2020/8/246369-threats-of-a-replication-crisis-in-empirical-computer-science/fulltext">replication crisis</a>; automated program repair, an area of software engineering research, is no exception. Automated program repair experiments involve building, testing, analysing and transforming complex software projects. Modus automated experimental workflows of the well-known <a href="https://repairbenchmarks.cs.umass.edu/">ManyBugs</a> benchmark using XXX LoC, compared to YYY LoC of existing scripts, reduced experiments execution time by ZZ%, while enhancing reproducibility.</p>
-        <p><a href="https://github.com/modus-continens/program-repair-case-study">Program repair case study</a></p>        
+        <p><a href="https://github.com/modus-continens/program-repair-case-study">Program repair case study</a></p>
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-shell">
-TODO            
+TODO
         </code></pre>
       </div>
     </div>
       </div>
     </div>
-    
+
   <div class="p-5">
     <div class="container">
       <div class="row">
@@ -221,7 +229,7 @@ TODO
           <p>The query <code>openjdk(version, "jdk", variant), number_gt(version, 11)</code> for <a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK Modusfile</a> builds all variants of all JDK versions greater than 11. Modus builds 23 images in parallel, reusing intermediate layers accross images:</p>
           <pre><code class="language-shell">
 $ modus build . 'openjdk(version, "jdk", variant), number_gt(version, 11)'
-Exporting 1/23: openjdk("17", "jdk", "bullseye") -> 
+Exporting 1/23: openjdk("17", "jdk", "bullseye") ->
 sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
 Exporting 2/23: openjdk("17", "jdk", "slim-buster") ->
 sha256:c34ce3c1fcc0c7431e1392cc3abd0dfe2192ffea1898d5250f199d3ac8d8720f
@@ -248,13 +256,13 @@ sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
       </div>
       <div class="col-lg-6 col-md-12">
         <p>The operator <code>::merge</code> is applied to a fragment of code to ensure that it will produce a single layers. As a result, the directory <code>src</code> will not be stored in an intermediate layer:</p>
-        <pre><code class="language-python">
+        <pre><code class="language-modusfile">
 app(build_mode) :-
     from("gcc:latest"),
     (
         copy("src", "src"),
         (
-            build_mode = "release", 
+            build_mode = "release",
             run("cd src; make install")
         ;
             build_mode = "debug",
@@ -275,13 +283,13 @@ app(build_mode) :-
       <div class="col-lg-6 col-md-12">
         <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide any tools for modularity and code reuse. Besides, to optimise image size, they require structuring code in an way that harms readability.</p>
         <p class="lead">Modus supports code evolution and maintenance by providing zero-cost modularity and code reuse. Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows. Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
-        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates</a></p>        
+        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates</a></p>
         <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
         <p><a href="https://docs.modus-continens.com/library/">List of operators</a></p>
       </div>
       <div class="col-lg-6 col-md-12">
         <p>Using a user-defined predicate <code>install</code> to reuse library installation code:</p>
-        <pre><code class="language-python">
+        <pre><code class="language-modusfile">
 install(lib, version) :-
     run(f"wget https://example.com/releases/${lib}-v${version}.tar.gz && \
           tar xf ${lib}-v${version}.tar.gz && \
@@ -295,8 +303,8 @@ app :-
     install("liba", "1.3.5"),
     install("libb", "4.1").
         </code></pre>
-        <p>Using a standard library predicate <code>semver_geq</code> to compare versions of Ubuntu:</p> 
-        <pre><code class="language-python">
+        <p>Using a standard library predicate <code>semver_geq</code> to compare versions of Ubuntu:</p>
+        <pre><code class="language-modusfile">
 base(distr_version, python_version) :-
     semver_geq(distr_version, "16.04"),
     from(f"ubuntu:${distr_version}"),
@@ -304,7 +312,7 @@ base(distr_version, python_version) :-
           && rm -rf /var/lib/apt/lists/*").
         </code></pre>
         <p>Using a standard library operator <code>::copy</code> to copy files from another build stage</p>
-        <pre><code class="language-python">
+        <pre><code class="language-modusfile">
 builder(go_version) :-
     from(f"golang:${go_version}")
         ::set_workdir("/go/src/github.com/alexellis/href-counter/"),
@@ -327,7 +335,7 @@ release :-
     </div>
       </div>
     </div>
-  
+
 
   </div>
 
@@ -344,8 +352,23 @@ release :-
 
 <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 <script async defer src="https://buttons.github.io/buttons.js"></script>
-<script src="https://unpkg.com/prismjs@v1.x/components/prism-core.min.js"></script>
-<script src="https://unpkg.com/prismjs@v1.x/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="assets/dist/js/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<script>
+  for (let code of document.querySelectorAll("pre > code[class^='language-']")) {
+    code.parentElement.className = code.className;
+    let f = code.childNodes[0];
+    // Remove empty first and last line inserted by HTML.
+    if (f instanceof Text) {
+      if (f.textContent.startsWith("\n")) {
+        f.textContent = f.textContent.slice(1);
+      }
+      if (/\n\s*/m.test(f.textContent)) {
+        f.textContent = f.textContent.replace(/\n\s*$/m, "")
+      }
+    }
+  }
+</script>
 
 </body>
 
