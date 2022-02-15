@@ -58,7 +58,7 @@
         <li class="nav-item">
           <a class="nav-link" href="https://github.com/modus-continens/modus/issues">Issue Tracker</a>
         </li>
-        <a class="nav-link" href="https://groups.google.com/g/modus-continens">Mailing List</a>
+        <a class="nav-link" href="https://discord.gg/bXxwfVE9Kj">Discord</a>        
         </li>
       </ul>
     </div>
@@ -85,7 +85,9 @@
          <!-- Place this tag where you want the button to render. -->
         <p>
           <a class="btn btn-primary mt-0" href="https://github.com/modus-continens/modus/blob/main/GETTING_STARTED.md"
-            role="button">Getting Started &raquo;</a>
+            role="button">Get Started</a>
+          <a class="btn btn-secondary mt-0" href="https://discord.gg/bXxwfVE9Kj"
+            role="button">Join Community</a>          
         </p>
       </div>
     </div>
@@ -145,8 +147,8 @@
       <h2 class="featurette-heading" id="parameterised-builds">Build Parameter Dependencies</h2>
       <div class="row">
         <div class="col-lg-6 col-md-12">
-          <p class="lead">Container images are intrinsically parameterised, e.g.  <code>python:3.9-slim-bullseye</code> is parameterised with Python's version <code>3.9</code> and Debian's options <code>slim</code> and <code>bullseye</code>. These parameters can, and often do, depend on and interact each other and these interactions determine how images are built. Dockerfiles only support parameters as global variables, and do not handle dependencies between them. Developers either <a href="https://github.com/klee/klee/blob/0ba95edbad26fe70c8132f0731778d94f9609874/Dockerfile#L1-L34">hard-code version dependencies</a> or implement complex, ad-hoc Dockerfile generators. For example, <a href="https://github.com/docker-library/openjdk">Official OpenJDK Docker Images</a> use a combination of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfiles templates</a> with embedded JQ queries, <a href="https://github.com/docker-library/bashbrew/blob/1da7341a79651d28fbcc3d14b9176593c4231942/scripts/jq-template.awk">AWK scripts</a> and <a href="https://github.com/docker-library/openjdk/blob/abebf9325fea4606b9759fb3b9257ea3eef40061/apply-templates.sh">Bash scripts</a> to support parametrisation.</p>
-          <p class="lead">Modus capitalises on a strong <a href="https://docs.modus-continens.com/foundations">logic progamming foundation</a> to handle parameters and their dependecies in an intuitive, declarative fashion. Modus decreased the size of build scripts for OpenJDK Docker images from 549 LoC written in three languages to 315 LoC written in a single language.  Modus also reduced the build time by 23% because its build model enables more effective parallelisation.</p> <p><a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK images case study &raquo;</a></p>
+          <p class="lead">Container images are intrinsically parameterised, e.g.  <code>python:3.9-slim-bullseye</code> is parameterised with Python's version <code>3.9</code> and Debian's options <code>slim</code> and <code>bullseye</code>. These parameters can, and often do, depend on and interact with each other and these interactions determine how images are built. Dockerfiles only support parameters as global variables, and do not handle dependencies between them. Developers either <a href="https://github.com/klee/klee/blob/0ba95edbad26fe70c8132f0731778d94f9609874/Dockerfile#L1-L34">hard-code version dependencies</a> or implement complex, ad-hoc Dockerfile generators. For example, <a href="https://github.com/docker-library/openjdk">Official OpenJDK Docker Images</a> use a combination of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfiles templates</a> with embedded JQ queries, <a href="https://github.com/docker-library/bashbrew/blob/1da7341a79651d28fbcc3d14b9176593c4231942/scripts/jq-template.awk">AWK scripts</a> and <a href="https://github.com/docker-library/openjdk/blob/abebf9325fea4606b9759fb3b9257ea3eef40061/apply-templates.sh">Bash scripts</a> to support parametrisation.</p>
+          <p class="lead">Modus capitalises on a strong <a href="https://docs.modus-continens.com/foundations">logic progamming foundation</a> to handle parameters and their dependecies in an intuitive, declarative fashion. Modus decreased the size of build scripts for OpenJDK Docker images from 549 LoC written in three languages to 315 LoC written in a single language.  Modus also reduced the build time by 23% because its build model enables more effective parallelisation.</p> <p><a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK images case study</a></p>
         </div>
         <div class="col-lg-6 col-md-12">
           <p>
@@ -196,7 +198,7 @@ debian_image(variant, java_type) :-
       <div class="col-lg-6 col-md-12">
         <p class="lead">Building software, executing CI/CD actions, or conducting empirical computer science research require defining complex, reproducible workflows, and executing them efficiently. Dockerfiles cannot express complex workflows. Modus is a general-purpose, build system agnostic tool that can containerise your workflows, make them more reproducible, and optimise via automatic caching and parallelisation.</p>
         <p class="lead">Computer science research suffers from a <a href="https://cacm.acm.org/magazines/2020/8/246369-threats-of-a-replication-crisis-in-empirical-computer-science/fulltext">replication crisis</a>; automated program repair, an area of software engineering research, is no exception. Automated program repair experiments involve building, testing, analysing and transforming complex software projects. Modus automated experimental workflows of the well-known <a href="https://repairbenchmarks.cs.umass.edu/">ManyBugs</a> benchmark using XXX LoC, compared to YYY LoC of existing scripts, reduced experiments execution time by ZZ%, while enhancing reproducibility.</p>
-        <p><a href="https://github.com/modus-continens/program-repair-case-study">Program repair case study &raquo;</a></p>        
+        <p><a href="https://github.com/modus-continens/program-repair-case-study">Program repair case study</a></p>        
       </div>
       <div class="col-lg-6 col-md-12">
         <pre><code class="language-shell">
@@ -273,9 +275,9 @@ app(build_mode) :-
       <div class="col-lg-6 col-md-12">
         <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide any tools for modularity and code reuse. Besides, to optimise image size, they require structuring code in an way that harms readability.</p>
         <p class="lead">Modus supports code evolution and maintenance by providing zero-cost modularity and code reuse. Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows. Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
-        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates &raquo;</a></p>        
+        <p><a href="https://docs.modus-continens.com/library/">List of builtin predicates</a></p>        
         <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
-        <p><a href="https://docs.modus-continens.com/library/">List of operators &raquo;</a></p>
+        <p><a href="https://docs.modus-continens.com/library/">List of operators</a></p>
       </div>
       <div class="col-lg-6 col-md-12">
         <p>Using a user-defined predicate <code>install</code> to reuse library installation code:</p>
