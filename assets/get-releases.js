@@ -13,31 +13,45 @@ let doc_ready = new Promise(resolve => {
 });
 
 async function update_releases(err, res) {
-  let placeholder = document.getElementById("release-download-btn-container");
+  let linux_placeholder = document.getElementById("release-download-btn-linux-container");
+
+  function set_download_url(id, url) {
+    let ele = document.getElementById(id);
+    if (ele) {
+      ele.innerText = url;
+    }
+  }
+
   function present_release(rel) {
     let assets = rel.assets;
-    let x86_64 = assets.find(x => x.name.indexOf("x86_64") >= 0 && x.name.indexOf("linux") >= 0);
-    let aarch64 = assets.find(x => x.name.indexOf("aarch64") >= 0 && x.name.indexOf("linux") >= 0);
-    if (window.navigator.userAgent.indexOf("x86_64") >= 0) {
-      aarch64 = null;
+    let x86_64_linux = assets.find(x => x.name.indexOf("x86_64") >= 0 && x.name.indexOf("linux") >= 0);
+    let aarch64_linux = assets.find(x => x.name.indexOf("aarch64") >= 0 && x.name.indexOf("linux") >= 0);
+    let is_x64 = false;
+    if (window.navigator.userAgent.indexOf("x86_64") >= 0 || window.navigator.userAgent.indexOf("x64") >= 0) {
+      is_x64 = true;
     }
-    let btns = [];
-    if (aarch64) {
-      let url = aarch64.browser_download_url;
-      btns.push(["ARM64 Linux", url]);
+    let linux_btns = [];
+    if (x86_64_linux) {
+      let url = x86_64_linux.browser_download_url;
+      linux_btns.push(["x86_64 Linux", url]);
+      set_download_url("x86_64-linux-download-url", url);
     }
-    if (x86_64) {
-      let url = x86_64.browser_download_url;
-      btns.push(["x86_64 Linux", url]);
+    if (aarch64_linux) {
+      let url = aarch64_linux.browser_download_url;
+      linux_btns.push(["ARM64 Linux", url]);
+      set_download_url("aarch64-linux-download-url", url);
     }
-    let eft = placeholder.firstChild;
-    for (let [name, url] of btns) {
-      let node = document.createElement("a");
-      node.className = "btn btn-primary mt-0";
-      node.innerText = `Download v${rel.name} (${name})`;
-      node.href = url;
-      placeholder.insertBefore(node, eft);
-      placeholder.insertBefore(document.createTextNode(" "), eft);
+    if (!is_x64) {
+      linux_btns.reverse();
+    }
+    if (linux_placeholder) {
+      for (let [name, url] of linux_btns) {
+        let node = document.createElement("a");
+        node.className = "btn btn-primary mt-0";
+        node.innerText = `Download v${rel.name} (${name})`;
+        node.href = url;
+        linux_placeholder.append(node, document.createTextNode(" "));
+      }
     }
   }
   function show_error(err) {

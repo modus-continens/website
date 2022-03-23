@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Sergey Mechtaev">
+  <title>Modus</title>
+
+  <link rel="stylesheet" href="assets/dist/css/hljs-vs.css">
+
+  <!-- Bootstrap core CSS -->
+  <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Place this tag in your head or just before your close body tag. -->
+
+  <script src="assets/get-releases.js" async></script>
+
+  <style>
+  </style>
+
+  <!-- Custom styles for this template -->
+  <link href="modus.css" rel="stylesheet">
+
+  <style>
+    h3 {
+      font-weight: normal;
+      font-size: 1.5rem;
+    }
+
+    pre {
+      background-color: #002b36;
+      border: 2px solid #839496;
+      border-radius: 5px;
+      padding: 20px;
+      font-size: 1.1rem;
+      color: white;
+    }
+  </style>
+</head>
+
+<body class="pb-0 mb-0">
+
+<nav class="navbar navbar-expand-lg navbar-light modus-bg mb-0" aria-label="Modus navbar">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#modusNavbar"
+      aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="modusNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://docs.modus-continens.com">Docs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/modus-continens/modus">GitHub</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/modus-continens/modus/issues">Issue Tracker</a>
+        </li>
+        <a class="nav-link" href="https://discord.gg/bXxwfVE9Kj">Discord</a>
+        </li>
+        </li>
+        <a class="nav-link" href="https://play.modus-continens.com">Playground</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div>
+
+  <div class="p-5">
+    <div class="container">
+      <h2 class="featurette-heading">Installation</h2>
+
+      <p>
+        Modus can be installed on Linux and WSL via a binary release or from source with <code>cargo install modus</code>. When doing the latter, please ensure that you have the latest version of Rust installed.
+      </p>
+
+      <p>
+        There is currently no binary release for MacOS, please install from source if you are using a Mac.
+      </p>
+
+      <h3>Binary install (Linux / WSL)</h3>
+
+      <ul class="nav nav-tabs" id="installTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="install-linux-x86_64-tab" data-bs-toggle="tab" data-bs-target="#install-linux-x86_64" type="button" role="tab" aria-selected="true">x86_64</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="install-linux-aarch64-tab" data-bs-toggle="tab" data-bs-target="#install-linux-aarch64" type="button" role="tab" aria-selected="false">ARM64</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="installTabContent" style="padding-top: 10px;">
+        <div class="tab-pane fade show active" id="install-linux-x86_64" role="tabpanel" aria-labelledby="install-linux-x86_64-tab">
+<pre class="shell">
+mkdir ~/.bin 2>/dev/null;
+curl -sfL '<span id="x86_64-linux-download-url">???</span>' -o ~/.bin/modus && \
+chmod +x ~/.bin/modus && \
+echo 'export PATH="$HOME/.bin:$PATH"' >> ~/.bashrc; # or equivalent for your shell
+</pre>
+        </div>
+        <div class="tab-pane fade" id="install-linux-aarch64" role="tabpanel" aria-labelledby="install-linux-aarch64-tab">
+<pre class="shell">
+mkdir ~/.bin 2>/dev/null;
+curl -sfL '<span id="aarch64-linux-download-url">???</span>' -o ~/.bin/modus && \
+chmod +x ~/.bin/modus && \
+echo 'export PATH="$HOME/.bin:$PATH"' >> ~/.bashrc; # or equivalent for your shell
+</pre>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</body>
+
+</html>
