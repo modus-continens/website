@@ -269,23 +269,20 @@ sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
 	and installed packages, which greatly increases their size, slows down
 	their transfer through network, and compromises security by increasing
 	the attack surface. At Stackoverflow, the question <a href="https://stackoverflow.com/questions/24394243/why-are-docker-container-images-so-large"> Why are Docker container images so large?</a> has 103k views.
-	Dockerfiles cannot conditionally install packages and copy files based on the build configuration, and do not provide tool for fine-grained control of layers.</p>
-        <p class="lead">Modus enables the user to precisely define files and software packages required for their build configuration. Besides, Modus provides tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
+	Dockerfiles cannot conditionally install packages and copy files based on the build configuration without sacrifycing caching and parallelism, and do not provide tool for fine-grained control of layers.</p>
+        <p class="lead">Modus enables the user to precisely define files and software packages required for their build configuration. Modus provides also tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <p>The operator <code>::merge</code> is applied to a fragment of code to ensure that it will produce a single layers. As a result, the directory <code>src</code> will not be stored in an intermediate layer:</p>
         <pre><code class="language-modusfile">
+make("release") :- run("cd src; make install").
+make("debug") :- run("cd src; make -e install")::in_env("CFLAGS", "-g").
+
 app(build_mode) :-
     from("gcc:latest"),
     (
         copy("src", "src"),
-        (
-            build_mode = "release",
-            run("cd src; make install")
-        ;
-            build_mode = "debug",
-            run("cd src; make -e install")::in_env("CFLAGS", "-g")
-        ),
+        make(build_mode),
         run("rm -rf src")
     )::merge.
         </code></pre>
