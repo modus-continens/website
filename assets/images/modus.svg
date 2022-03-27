@@ -3,8 +3,8 @@
 
 <svg
    width="75.387939mm"
-   height="75.558266mm"
-   viewBox="0 0 150.77588 151.11654"
+   height="75.437302mm"
+   viewBox="0 0 150.77588 150.87461"
    version="1.1"
    id="svg5"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
@@ -27,9 +27,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="mm"
      showgrid="false"
-     inkscape:zoom="2.1971356"
-     inkscape:cx="171.35947"
-     inkscape:cy="131.07976"
+     inkscape:zoom="5.0373353"
+     inkscape:cx="171.42"
+     inkscape:cy="242.19154"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -252,14 +252,6 @@
        d="m 134.82195,142.02083 -10.66301,19.99403 -15.05466,-7.22539 z"
        id="path3792" />
     <path
-       style="fill:#ac424f;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 111.48513,171.76305 12.50086,-9.36005 -15.51587,-7.17496 -9.177439,13.22999 z"
-       id="path3794" />
-    <path
-       style="fill:#c45f49;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 124.33834,162.62782 9.82135,2.20444 -10.70133,10.91008 -10.97108,-3.68483 z"
-       id="path3796" />
-    <path
        style="fill:#ed9660;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 101.61244,95.428817 -10.225881,10.181193 13.517861,1.98745 z"
        id="path3798" />
@@ -379,5 +371,13 @@
        style="fill:#9b3529;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 60.670315,84.882291 71.247064,99.770927 53.729248,104.45597 51.568758,93.872351 Z"
        id="path4137" />
+    <path
+       style="fill:#ac424f;fill-opacity:1;stroke:none;stroke-width:0.529167px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 108.42354,155.08824 -9.372158,13.51128 13.016368,3.61009 11.82359,-9.72674 z"
+       id="path1125" />
+    <path
+       style="fill:#cc7461;fill-opacity:1;stroke:none;stroke-width:0.529167px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 124.44512,162.85119 10.3097,1.73418 -10.97575,10.91504 -10.96498,-3.05244 z"
+       id="path1355" />
   </g>
 </svg>
