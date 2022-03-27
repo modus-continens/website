@@ -6,7 +6,12 @@ body {
   margin-bottom: 20px;
 }
 
-.brand {
+.modus-logo-img {
+    width: 12%;
+    height: 12%;
+}
+
+.navbar-brand {
     display: inline-block;
     vertical-align: middle;
 }
@@ -36,7 +41,7 @@ body {
 
 /* Thin out the marketing headings */
 .featurette-heading {
-  margin: 1rem 0; /* Space out the Bootstrap <hr> more */
+  margin: 2rem 0; /* Space out the Bootstrap <hr> more */
 
   font-weight: 300;
   line-height: 1;
