@@ -7,16 +7,12 @@ body {
 }
 
 .modus-logo-img {
-    width: 120px;
+    width: 135px;
 }
 
 .navbar-brand {
     display: inline-block;
     vertical-align: middle;
-}
-
-.modus-title {
-    margin-top: 0.5em;
 }
 
 .modus-bg {
