@@ -274,10 +274,7 @@ sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
       </div>
       <div class="col-lg-6 col-md-12">
         <p>The operator <code>::merge</code> is applied to a fragment of code to ensure that it will produce a single layers. As a result, the directory <code>src</code> will not be stored in an intermediate layer:</p>
-        <pre><code class="language-modusfile">
-make("release") :- run("cd src; make install").
-make("debug") :- run("cd src; make -e install")::in_env("CFLAGS", "-g").
-
+<pre><code class="language-modusfile">
 app(build_mode) :-
     from("gcc:latest"),
     (
@@ -285,7 +282,8 @@ app(build_mode) :-
         make(build_mode),
         run("rm -rf src")
     )::merge.
-        </code></pre>
+make("release") :- run("cd src; make install").
+make("debug") :- run("cd src; make -e install")::in_env("CFLAGS", "-g").</code></pre>
       </div>
     </div>
       </div>
