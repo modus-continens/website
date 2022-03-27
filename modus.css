@@ -6,6 +6,11 @@ body {
   margin-bottom: 20px;
 }
 
+.brand {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .modus-title {
     margin-top: 0.5em;
 }

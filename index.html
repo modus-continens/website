@@ -13,6 +13,8 @@
   <!-- Bootstrap core CSS -->
   <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Place this tag in your head or just before your close body tag. -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
 
   <style>
     .bd-placeholder-img {
@@ -58,6 +60,9 @@
     <div class="collapse navbar-collapse" id="modusNavbar">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
+          <a class="navbar-brand brand bi bi-boxes" href="/"></a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="https://docs.modus-continens.com">Docs</a>
         </li>
         <li class="nav-item">
@@ -72,7 +77,7 @@
         <a class="nav-link" href="https://play.modus-continens.com">Playground</a>
         </li>
       </ul>
-      <a class="btn btn-outline-secondary mt-0" href="https://discord.gg/bXxwfVE9Kj" role="button">Join Community</a>
+      <a class="btn btn-outline-secondary mt-0" href="https://discord.gg/bXxwfVE9Kj" role="button"><i class="bi bi-people"></i> Join Community</a>
     </div>
   </div>
 </nav>
@@ -94,9 +99,9 @@
          <!-- Place this tag where you want the button to render. -->
         <p>
           <a class="btn btn-primary mt-0" href="get.html"
-            role="button">Install Modus</a>
+             role="button"><i class="bi bi-download"></i> Install Modus</a>
           <a class="btn btn-info mt-0" href="https://docs.modus-continens.com/tutorial.html"
-            role="button">Read Tutorial</a>
+            role="button"><i class="bi bi-book"></i> Read Tutorial</a>
         </p>
       </div>
     </div>
@@ -154,10 +159,10 @@
     <div class="p-5">
     <div class="container">
       <h2 class="featurette-heading" id="parameterised-builds">Build Parameter Dependencies</h2>
-      <div class="row">
+      <div class="row gx-5">
         <div class="col-lg-6 col-md-12">
-          <p class="lead">Container images are intrinsically parameterised, e.g.  <code>python:3.9-slim-bullseye</code> is parameterised with Python's version <code>3.9</code> and Debian's options <code>slim</code> and <code>bullseye</code>. These parameters can, and often do, depend on and interact with each other and these interactions determine how images are built. Dockerfiles only support parameters as global variables, and do not handle dependencies between them. Developers either <a href="https://github.com/klee/klee/blob/0ba95edbad26fe70c8132f0731778d94f9609874/Dockerfile#L1-L34">hard-code version dependencies</a> or implement complex, ad-hoc Dockerfile generators. For example, <a href="https://github.com/docker-library/openjdk">Official OpenJDK Docker Images</a> use a combination of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfiles templates</a> with embedded JQ queries, <a href="https://github.com/docker-library/bashbrew/blob/1da7341a79651d28fbcc3d14b9176593c4231942/scripts/jq-template.awk">AWK scripts</a> and <a href="https://github.com/docker-library/openjdk/blob/abebf9325fea4606b9759fb3b9257ea3eef40061/apply-templates.sh">Bash scripts</a> to support parametrisation.</p>
-          <p class="lead">Modus capitalises on a strong <a href="https://docs.modus-continens.com/foundations">logic progamming foundation</a> to handle parameters and their dependecies in an intuitive, declarative fashion. Modus decreased the size of build scripts for OpenJDK Docker images from 549 LoC written in three languages to 315 LoC written in a single language without sacrificing the build efficiency.</p> <p><a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK images case study</a></p>
+          <p class="lead">Container images are intrinsically parameterised, e.g.  <code>python:3.9-slim-bullseye</code> is parameterised with Python's version <code>3.9</code> and Debian's options <code>slim</code> and <code>bullseye</code>. These parameters can, and often do, depend on and interact with each other and these interactions determine how images are built. Dockerfiles only support parameters as global variables, and do not handle dependencies between them. Developers either <a href="https://github.com/klee/klee/blob/0ba95edbad26fe70c8132f0731778d94f9609874/Dockerfile#L1-L34">hard-code version dependencies</a> or implement ad-hoc Dockerfile generators. For example, Official OpenJDK Docker Images use a combination of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfiles templates</a> with embedded JQ queries, <a href="https://github.com/docker-library/bashbrew/blob/1da7341a79651d28fbcc3d14b9176593c4231942/scripts/jq-template.awk">AWK scripts</a> and <a href="https://github.com/docker-library/openjdk/blob/abebf9325fea4606b9759fb3b9257ea3eef40061/apply-templates.sh">Bash scripts</a> to support parametrisation.</p>
+          <p class="lead">Modus capitalises on its <a href="https://docs.modus-continens.com/foundations">logic progamming foundation</a> to handle parameters and their dependecies in an intuitive, declarative fashion. Modus decreased the size of OpenJDK Docker images build system by 47.6% from scripts written in three languages to a single Modusfile, while reducing the build time by 40.6%.</p> <p><a class="lead" href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK images case study <i class="bi bi-arrow-right-circle"></i></a></p>
         </div>
         <div class="col-lg-6 col-md-12">
           <p>
@@ -202,12 +207,12 @@ debian_image(variant, java_type) :-
 
 <!--   <div class="bg-light p-5"> -->
 <!--     <div class="container"> -->
-<!--     <div class="row"> -->
+<!--     <div class="row  gx-5"> -->
 <!--       <h2 class="featurette-heading" id="parallel-builds">Complex, Reproducible Workflows</h2> -->
 <!--       <div class="col-lg-6 col-md-12"> -->
 <!--         <p class="lead">Building software, executing CI/CD actions, or conducting empirical computer science research require defining complex, reproducible workflows, and executing them efficiently. Dockerfiles cannot express complex workflows. Modus is a general-purpose, build system agnostic tool that can containerise your workflows, make them more reproducible, and optimise via automatic caching and parallelisation.</p> -->
 <!--         <p class="lead">Computer science research suffers from a <a href="https://cacm.acm.org/magazines/2020/8/246369-threats-of-a-replication-crisis-in-empirical-computer-science/fulltext">replication crisis</a>; automated program repair, an area of software engineering research, is no exception. Automated program repair experiments involve building, testing, analysing and transforming complex software projects. Modus automated experimental workflows of the well-known <a href="https://repairbenchmarks.cs.umass.edu/">ManyBugs</a> benchmark using XXX LoC, compared to YYY LoC of existing scripts, reduced experiments execution time by ZZ%, while enhancing reproducibility.</p> -->
-<!--         <p><a href="https://github.com/modus-continens/program-repair-case-study">Program repair case study</a></p> -->
+<!--         <p><a class="lead" href="https://github.com/modus-continens/program-repair-case-study">Program repair case study <i class="bi bi-arrow-right-circle"></i></a></p> -->
 <!--       </div> -->
 <!--       <div class="col-lg-6 col-md-12"> -->
 <!--         <pre><code class="language-shell"> -->
@@ -220,7 +225,7 @@ debian_image(variant, java_type) :-
 
   <div class="p-5">
     <div class="container">
-      <div class="row">
+      <div class="row  gx-5">
         <h2 class="featurette-heading" id="parallel-builds">Parallel Builds</h2>
         <div class="col-lg-6 col-md-12">
           <p class="lead">Building container images is time-consuming. Although Dockerfile builds can be automatically parallelised, using <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfile generators</a> or <a href="https://github.com/containers/buildah">Buildah shell scripts</a> for defining custom logic makes parallelisation impossible or ineffective.</p>
@@ -245,7 +250,7 @@ sha256:220611111e8c9bbe242e9dc1367c0fa89eef83f26203ee3f7c3764046e02b248
 
   <div class="bg-light p-5">
     <div class="container">
-    <div class="row">
+    <div class="row  gx-5">
       <h2 class="featurette-heading" id="optimising-image-size">Optimising Image Size</h2>
       <div class="col-lg-6 col-md-12">
         <p class="lead">Container images often include redundant layers, files
@@ -279,14 +284,14 @@ app(build_mode) :-
 
   <div class="p-5">
     <div class="container">
-    <div class="row">
+    <div class="row  gx-5">
       <h2 class="featurette-heading" id="modularity-and-code-reuse">Modularity & Code Reuse</h2>
       <div class="col-lg-6 col-md-12">
         <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide any tools for modularity and code reuse. Besides, to optimise image size, they require structuring code in an way that harms readability.</p>
         <p class="lead">Modus supports code evolution and maintenance by providing zero-cost modularity and code reuse. Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows. Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
-        <p><a href="https://docs.modus-continens.com/library/predicates/index.html">List of builtin predicates</a></p>
+        <p><a class="lead" href="https://docs.modus-continens.com/library/predicates/index.html">List of builtin predicates <i class="bi bi-arrow-right-circle"></i></a></p>
         <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
-        <p><a href="https://docs.modus-continens.com/library/operators/index.html">List of operators</a></p>
+        <p><a class="lead" href="https://docs.modus-continens.com/library/operators/index.html">List of operators <i class="bi bi-arrow-right-circle"></i></a></p>
       </div>
       <div class="col-lg-6 col-md-12">
         <p>Using a user-defined predicate <code>install</code> to reuse library installation code:</p>
