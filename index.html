@@ -185,7 +185,7 @@ cargo_build("release") :- run("cargo build --release").
           <tr>
             <th scope="row">Maintainability</th>
             <td>Rely on hard-coded configuration and lack code reuse, so they're hard to maintain.</td>
-            <td>Provides zero-cost modularity and code reuse, so they're easy to maintain.</td>
+            <td>Provides zero-cost modularity and code reuse, so Modusfiles are easy to maintain.</td>
           </tr>
         </tbody>
       </table>
@@ -203,7 +203,7 @@ cargo_build("release") :- run("cargo build --release").
         </div>
         <div class="col-lg-6 col-md-12">
           <p>
-            This fragment of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">OpenJDK images build template</a> combines Dockerfile with two external tools: <code>{{</code> syntax handled by an AWK script, and predicates expressed as JQ queries:
+            This fragment of <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">OpenJDK images build template</a> combines Dockerfile with two external tools: (1) <code>{{</code> syntax handled by an AWK script and (2) predicates expressed as JQ queries:
             <pre><code class="language-dockerfile">
 FROM {{
     if is_debian_slim then
@@ -219,7 +219,7 @@ FROM {{
     end
 }}
             </code></pre>
-            <p>An <a href="https://github.com/modus-continens/openjdk-images-case-study/blob/main/linux.Modusfile">equivalent Modusfile</a> naturally expresses this fragment without external tools:</p>
+            <p>An <a href="https://github.com/modus-continens/openjdk-images-case-study/blob/main/linux.Modusfile">equivalent Modusfile</a> expresses this fragment without external tools:</p>
             <pre><code class="language-modusfile">
 debian_image(variant, java_type) :-
     (
@@ -315,8 +315,8 @@ TODO
 	and installed packages, which greatly increases their size, slows down
 	their transfer through network, and compromises security by increasing
 	the attack surface. At Stackoverflow, the question <a href="https://stackoverflow.com/questions/24394243/why-are-docker-container-images-so-large"> Why are Docker container images so large?</a> has 103k views.
-	Dockerfiles cannot conditionally install packages and copy files based on the build configuration without sacrifycing caching and parallelism, and do not provide tool for fine-grained control of layers.</p>
-        <p class="lead">Modus enables the user to precisely define files and software packages required for their build configuration. Modus provides also tools to reduce image size such as the operator <code>::merge</code> that merges several layers into one.</p>
+	Dockerfiles cannot conditionally install packages and copy files based on the build configuration without sacrificing caching and parallelism, and do not provide tool for fine-grained control of layers.</p>
+        <p class="lead">Modus provides predicates and operators for querying and modifying the build environment. Together, they allow the user to precisely define the files and software packages their build configuration requires. Modus provides constructs to reduce image size such as the operator <code>::merge</code> that merges several layers into one, and for convninently defining multi-stage builds.</p>
       </div>
       <div class="col-lg-6 col-md-12">
         <p>The operator <code>::merge</code> is applied to a fragment of code to ensure that it will produce a single layers. As a result, the directory <code>src</code> will not be stored in an intermediate layer:</p>
@@ -340,7 +340,7 @@ make("debug") :- run("cd src; make -e install")::in_env("CFLAGS", "-g").</code><
     <div class="row  gx-5">
       <h2 class="featurette-heading" id="modularity-and-code-reuse">Modularity & Code Reuse</h2>
       <div class="col-lg-6 col-md-12">
-        <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide any tools for modularity and code reuse. Besides, to optimise image size, they require structuring code in an way that harms readability.</p>
+        <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide features for modularity and code reuse. Besides, to optimise image size, they require structuring code in an way that <a href="https://github.com/moby/moby/issues/16058">many dislike</a>.</p>
         <p class="lead">Modus supports code evolution and maintenance by providing zero-cost modularity and code reuse. Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows. Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
         <p><a class="lead" href="https://docs.modus-continens.com/library/predicates/index.html">List of builtin predicates <i class="bi bi-arrow-right-circle"></i></a></p>
         <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
