@@ -149,7 +149,7 @@
           </tr>
           <tr>
             <th scope="row">Caching</th>
-            <td>Support custom workflows only by resorting to scripts which are ineffectively cached.</td>
+            <td>Ineffectively cache custom, script-based workflows.</td>
             <td>Provides effective caching for custom workflows.</td>
           </tr>
           <tr>
@@ -240,8 +240,8 @@ debian_image(variant, java_type) :-
       <div class="row  gx-5">
         <h2 class="featurette-heading" id="parallel-builds">Parallel Builds</h2>
         <div class="col-lg-6 col-md-12">
-          <p class="lead">Building container images is time-consuming. Although Dockerfile builds can be automatically parallelised, using <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">Dockerfile generators</a> or <a href="https://github.com/containers/buildah">Buildah shell scripts</a> for defining custom logic makes parallelisation impossible or ineffective.</p>
-          <p class="lead">Modus unlocks the full potential of build parallelisation by statically constructing the build graph, and using <a href="https://github.com/moby/buildkit">BuildKit</a> to agressively paralellise execution. Modus can build multiple images in parallel while maximally reusing shared layers across them.</p>
+          <p class="lead">Building container images is time-consuming. While Dockerfile builds that define only linear workflows without custom logic are automatically parallelised, builds involing custom logic are not. For example, using <a href="https://github.com/docker-library/openjdk/blob/20e86dbd02a19bca2f66b46bc3e8b00170f6f69c/Dockerfile-linux.template">OpenJDK Dockerfile template</a> reduced build time by 40.6%, because the templating scripts are not automatically parallelised. Alternative solutions such as <a href="https://github.com/containers/buildah">Buildah scripts</a> also cannot be automatically parallelised.</p>
+          <p class="lead">Modus statically constructing the build graph consisting of all required operations to build target images, which enables it to agressively paralellise build with <a href="https://github.com/moby/buildkit">BuildKit</a>. When building multiple images in parallel, Modus reuses shared layers across them.</p>
         </div>
         <div class="col-lg-6 col-md-12">
           <p>The query <code>openjdk(version, "jdk", variant), number_gt(version, 11)</code> for <a href="https://github.com/modus-continens/openjdk-images-case-study">OpenJDK Modusfile</a> builds all variants of all JDK versions greater than 11. Modus builds 23 images in parallel, reusing intermediate layers accross images:</p>
