@@ -94,7 +94,7 @@
             <div class="col-md-8">
               <div class="card-body pt-0 mt-0">
                 <h1 class="pb-0 mb-0 mt-0 pt-4">Modus</h1>
-                <p class="">A language for building OCI container images</p>
+                <p class="">A language for building Docker/OCI container images</p>
                 <a class="github-button" href="https://github.com/modus-continens/modus" data-icon="octicon-star"
                    data-size="large" data-show-count="true" aria-label="Star modus-continens/modus on GitHub">Star</a>                
               </div>
@@ -106,7 +106,7 @@
 
     <div class="row mt-2">
       <div class="col-lg-8 col-md-12">
-	<p class="lead">Modus uses logic programming to solve key pain points of Dockerfiles &mdash; their inability to express interactions among parameters or to specify complex build workflows, their difficult and inefficient parallelisation, bloated images, and costly maintenance.</p>
+	<p class="lead">Modus uses logic programming to express interactions among build parameters and to specify complex build workflows, automatically parallelises builds, helps to reduce image size, and simplifies maintenance.</p>
 
          <!-- Place this tag where you want the button to render. -->
         <p>
@@ -129,11 +129,11 @@
     <div class="container">
 <div class="row gx-5">
         <div class="col-lg-6 col-md-12">
-          <p class="lead">TODO</p>
+          <p class="lead">A Modus program consists of a set of rules that define how new images are built from existing images by adding filesystem layers. Images and layers are represented using predicates which may have parameters. When building an image, Modus automatically resolves parameter values and computes a build DAG containing all instructions necessary to construct the image. These instructions are automatically cached and can be executed in parallel.</p>
         </div>
         <div class="col-lg-6 col-md-12">
           <p>
-            TODO:
+            This Modusfile defines the image <code>my_app</code> with the parameter <code>profile</code>. Depending on the value of <code>profile</code>, it builds either a debug or a release binary. The operators <code>::set_workdir</code> and <code>::set_entrypoint</code> set image properties:
             <pre><code class="language-modusfile">
 my_app(profile) :-
   (
@@ -141,10 +141,8 @@ my_app(profile) :-
     copy(".", "."),
     cargo_build(profile)
   )::set_entrypoint(f"./target/${profile}/my_app").
-
 cargo_build("debug") :- run("cargo build").
-cargo_build("release") :- run("cargo build --release").
-            </code></pre>
+cargo_build("release") :- run("cargo build --release").</code></pre>
         </div>
       </div>      
     </div>
@@ -340,7 +338,7 @@ make("debug") :- run("cd src; make -e install")::in_env("CFLAGS", "-g").</code><
     <div class="row  gx-5">
       <h2 class="featurette-heading" id="modularity-and-code-reuse">Modularity & Code Reuse</h2>
       <div class="col-lg-6 col-md-12">
-        <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide features for modularity and code reuse. Besides, to optimise image size, they require structuring code in an way that <a href="https://github.com/moby/moby/issues/16058">many dislike</a>.</p>
+        <p class="lead">Just like any code, container build definitions evolve and require maintenance. Dockerfiles do not provide features for modularity and code reuse. Besides, to optimise image size, they require structuring code in an <a href="https://nickjanetakis.com/blog/docker-tip-3-chain-your-docker-run-instructions-to-shrink-your-images">way</a> that <a href="https://github.com/moby/moby/issues/16058">many dislike</a>.</p>
         <p class="lead">Modus supports code evolution and maintenance by providing zero-cost modularity and code reuse. Modus allows users to define their own commands, such as layer building functions or logical predicates, to abstract reusable build workflows. Modus provides a library of builtin predicates to handle common data structures in the build logic. For example, the predicate <code>semver_geq</code> checks if the left version is greater or equal to the right version according to <a href="https://semver.org/">SemVer</a> specification.</p>
         <p><a class="lead" href="https://docs.modus-continens.com/library/predicates/index.html">List of builtin predicates <i class="bi bi-arrow-right-circle"></i></a></p>
         <p class="lead">Modus provides a library of operators, such as <code>::copy</code> for <a href="https://docs.docker.com/develop/develop-images/multistage-build/"></a>multi-stage builds, that encapsulate build-specific instructions and manipulation of OCI image properties.</p>
@@ -360,8 +358,7 @@ install(lib, version) :-
 app :-
     from("gcc:latest"),
     install("liba", "1.3.5"),
-    install("libb", "4.1").
-        </code></pre>
+    install("libb", "4.1").</code></pre>
         <p>Using a standard library predicate <code>semver_geq</code> to compare versions of Ubuntu:</p>
         <pre><code class="language-modusfile">
 base(distr_version, python_version) :-
