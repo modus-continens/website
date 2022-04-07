@@ -126,7 +126,7 @@
     <div class="container">
       <div class="row gx-5">
         <div class="col-lg-6 col-md-12">
-          <p class="lead">A Modus program is a set of rules that define how new images are built from existing images by adding filesystem layers. Images and layers are represented using predicates which may have parameters. When building an image, Modus automatically resolves parameter values and computes a build DAG containing all instructions necessary to construct the image. These instructions are automatically cached and can be executed in parallel.</p>
+          <p class="lead">A Modus program is a set of rules that define how new images are built from existing images by adding filesystem layers. Images and layers are represented using predicates, which may have parameters. When building an image, Modus automatically resolves parameter values and computes a build DAG containing all the instructions necessary to construct the image. Modus automatically caches these instructions and executes them in parallel.</p>
         </div>
         <div class="col-lg-6 col-md-12">
           <p>This Modusfile defines the image <code>my_app</code> with the parameter <code>profile</code>. Depending on the value of <code>profile</code>, it builds either a debug or a release binary. The operators <code>::set_workdir</code> and <code>::set_entrypoint</code> set image properties:
