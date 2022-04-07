@@ -290,7 +290,7 @@ make("release") :- run("make program").
         </div>
       </div>
     </div>
-    
+
     <div class="p-5">
       <div class="container">
         <div class="row  gx-5">
@@ -311,7 +311,7 @@ app(build_mode) :-
     )::merge.
 make("release") :- run("cd src; make install").
 make("debug") :- run("cd src; make -e install")::in_env("CFLAGS", "-g").</code></pre>
-            <p>The operator <code>::copy</code> is applied to copy a file converted to UNIX format from a temporary image, without requiring to install the package <code>dos2unix</code> on the target image <code>app</code>:</p>
+            <p>The operator <code>::copy</code> is applied to copy a file converted to UNIX format from a temporary image, without requiring installation of the package <code>dos2unix</code> on the target image <code>app</code>:</p>
             <pre><code class="language-modusfile">
 copy_convert(file, dest) :-
     (
